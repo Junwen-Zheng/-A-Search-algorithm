@@ -1,3 +1,4 @@
+
 try:
     import pygame
     import sys
@@ -128,4 +129,39 @@ mainloop()
 pygame.init()
 openSet.append(start)
 
+def mousePress(x):
+    t = x[0]
+    w = x[1]
+    g1 = t // (800 // cols)
+    g2 = w // (800 // row)
+    acess = grid[g1][g2]
+    if acess != start and acess != end:
+        if acess.obs == False:
+            acess.obs = True
+            acess.show((255, 255, 255), 0)
+
+end.show((255, 8, 127), 0)
+start.show((255, 8, 127), 0)
+
+loop = True
+while loop:
+    ev = pygame.event.get()
+
+    for event in ev:
+        if event.type == pygame.QUIT:
+            pygame.quit()
+        if pygame.mouse.get_pressed()[0]:
+            try:
+                pos = pygame.mouse.get_pos()
+                mousePress(pos)
+            except AttributeError:
+                pass
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                loop = False
+                break
+
+for i in range(cols):
+    for j in range(row):
+        grid[i][j].addNeighbors(grid)
 
