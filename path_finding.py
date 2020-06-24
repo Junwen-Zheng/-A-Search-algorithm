@@ -170,3 +170,59 @@ def heurisitic(n, e):
     #d = abs(n.i - e.i) + abs(n.j - e.j)
     return d
 
+
+def main():
+    end.show((255, 8, 127), 0)
+    start.show((255, 8, 127), 0)
+    if len(openSet) > 0:
+        lowestIndex = 0
+        for i in range(len(openSet)):
+            if openSet[i].f < openSet[lowestIndex].f:
+                lowestIndex = i
+
+        current = openSet[lowestIndex]
+        if current == end:
+            print('done', current.f)
+            start.show((255,8,127),0)
+            temp = current.f
+            for i in range(round(current.f)):
+                current.closed = False
+                current.show((0,0,255), 0)
+                current = current.previous
+            end.show((255, 8, 127), 0)
+
+            Tk().wm_withdraw()
+            result = messagebox.askokcancel('Program Finished', ('The program finished, the shortest distance \n to the path is ' + str(temp) + ' blocks away, \n would you like to re run the program?'))
+            if result == True:
+                os.execl(sys.executable,sys.executable, *sys.argv)
+            else:
+                ag = True
+                while ag:
+                    ev = pygame.event.get()
+                    for event in ev:
+                        if event.type == pygame.KEYDOWN:
+                            ag = False
+                            break
+            pygame.quit()
+
+        openSet.pop(lowestIndex)
+        closedSet.append(current)
+
+        neighbors = current.neighbors
+        for i in range(len(neighbors)):
+            neighbor = neighbors[i]
+            if neighbor not in closedSet:
+                tempG = current.g + current.value
+                if neighbor in openSet:
+                    if neighbor.g > tempG:
+                        neighbor.g = tempG
+                else:
+                    neighbor.g = tempG
+                    openSet.append(neighbor)
+
+            neighbor.h = heurisitic(neighbor, end)
+            neighbor.f = neighbor.g + neighbor.h
+
+            if neighbor.previous == None:
+                neighbor.previous = current
+
