@@ -234,3 +234,11 @@ def main():
                 closedSet[i].show(red, 0)
     current.closed = True
 
+
+while True:
+    ev = pygame.event.poll()
+    if ev.type == pygame.QUIT:
+        pygame.quit()
+    pygame.display.update()
+    main()
+
